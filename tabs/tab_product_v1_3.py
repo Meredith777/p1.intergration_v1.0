@@ -55,12 +55,12 @@ def render(base_dir, data_dir):
 
     # 내부 서브메뉴 데이터 및 상태 관리
     tabs = [
-        "📉 핵심요약",
-        "💎 카테고리별 수익 기여도",
-        "💳 가격대별 분포",
+        "📉 핵심요약", 
+        "💎 카테고리별 수익 기여도", 
+        "💳 가격대별 분포", 
         "🚀 전환 최적화 가이드"
     ]
-    
+
     if "product_sub_menu" not in st.session_state:
         st.session_state["product_sub_menu"] = tabs[0]
 
@@ -68,7 +68,7 @@ def render(base_dir, data_dir):
     # 이것은 CSS 캐시 문제와 무관하게 100% 확실하게 버튼 형태로 렌더링됩니다.
     col_t1, col_t2, col_t3, col_t4 = st.columns(4)
     tab_cols = [col_t1, col_t2, col_t3, col_t4]
-    
+
     for i, tab_name in enumerate(tabs):
         is_active = st.session_state["product_sub_menu"] == tab_name
         if tab_cols[i].button(
@@ -89,8 +89,8 @@ def render(base_dir, data_dir):
 
 
     # --- 1. 홈 / 분석 개요 ---
-    if sub_menu == "📉 여정의 불편: 탐색 단계 병목 진단":
-        st.header("📝 여정의 불편: 탐색 단계 병목 진단 (Summary)")
+    if sub_menu == "📉 핵심요약":
+        st.header("📝 핵심요약 (Summary)")
         st.success("""
         본 분석은 브라질 최대 이커머스 Olist의 데이터를 바탕으로 **카테고리별 성과, 가격 전략, 제품 정보 품질**의 상관관계를 심층 분석했습니다.
         특히 매출을 견인하는 핵심 가격대(200-500 BRL)와 물량을 확보하는 주력 카테고리를 식별하여 향후 비즈니스 성장을 위한 구체적인 전략 방향을 제시합니다.
