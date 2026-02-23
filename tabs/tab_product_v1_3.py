@@ -91,6 +91,11 @@ def render(base_dir, data_dir):
     # --- 1. 홈 / 분석 개요 ---
     if sub_menu == "📉 핵심요약":
         st.header("📝 핵심요약 (Summary)")
+
+        # 요약 섹션 이미지 추가
+        img_summary = os.path.join(IMAGE_DIR, "top_products", "top10_revenue_quantity_v3.png")
+        if os.path.exists(img_summary):
+            st.image(img_summary, caption="Olist 주요 카테고리 성과 요약", use_container_width=True)
         st.success("""
         본 분석은 브라질 최대 이커머스 Olist의 데이터를 바탕으로 **카테고리별 성과, 가격 전략, 제품 정보 품질**의 상관관계를 심층 분석했습니다.
         특히 매출을 견인하는 핵심 가격대(200-500 BRL)와 물량을 확보하는 주력 카테고리를 식별하여 향후 비즈니스 성장을 위한 구체적인 전략 방향을 제시합니다.
