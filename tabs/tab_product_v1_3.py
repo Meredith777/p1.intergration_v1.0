@@ -55,10 +55,10 @@ def render(base_dir, data_dir):
 
     # 내부 서브메뉴 데이터 및 상태 관리
     tabs = [
-        "📉 여정의 불편: 탐색 단계 병목 진단", 
-        "💎 경험의 가치: 카테고리별 핵심 가치", 
-        "💳 구매 전환: 최적 가격대 식별", 
-        "🚀 성장의 개선: 전환 최적화 가이드"
+        "📉 핵심요약",
+        "💎 카테고리별 수익 기여도",
+        "💳 가격대별 분포",
+        "🚀 전환 최적화 가이드"
     ]
     
     if "product_sub_menu" not in st.session_state:
@@ -96,7 +96,7 @@ def render(base_dir, data_dir):
         특히 매출을 견인하는 핵심 가격대(200-500 BRL)와 물량을 확보하는 주력 카테고리를 식별하여 향후 비즈니스 성장을 위한 구체적인 전략 방향을 제시합니다.
         """)
 
-        st.header("💎 경험의 가치: 제품 정보의 신뢰도 영향 (Background)")
+        st.header("💎 분석배경 (Background)")
         st.markdown("""
         이커머스 시장의 경쟁이 심화됨에 따라 데이터 기반의 **제품 전략 최적화**가 필수적입니다.
         단순히 많이 파는 것을 넘어, 어떤 가격대에서 수익성이 극대화되는지, 배송비와 제품 정보(사진, 설명)가 실제 구매 전환에 어떤 영향을 미치는지 파악하여 플랫폼 운영 효율을 높이고자 분석을 수행했습니다.
@@ -128,7 +128,7 @@ def render(base_dir, data_dir):
                 </div>
             """, unsafe_allow_html=True)
 
-        st.header("🚀 성장의 개선: 전환율 극대화 로드맵")
+        st.header("🚀 분석내용 (Analysis)")
         st.markdown("""
         1. **제품 특성 영향도:** 이름 길이, 설명 길이, 사진 개수가 구매 및 만족도에 미치는 영향 분석.
         2. **가격 전략:** 최적의 판매 가격대 도출 및 매출-수량 분포 확인.
@@ -138,13 +138,13 @@ def render(base_dir, data_dir):
         st.header("🏁 결론 (Conclusion)")
         st.info("""
         - **가격 전략:** '200-500 BRL' 구간은 전체 매출의 30%를 차지하는 핵심 수익원이므로 해당 가격대 상품의 강화가 필요합니다.
-        - **운영 최적화:** 제품 정보(사진 2~4장, 이름 40~60자)의 품질을 표준화할 때 구매 전환율이 가장 높게 나타납니다.
+        - **운영 최적화:** 제품 정보의 품질을 표준화할 때 구매 전환율이 가장 높게 나타납니다.
         - **성장 동력:** `bed_bath_table`과 같은 고물량 카테고리와 `watches_gifts`와 같은 고효율 카테고리의 전략적 배분을 통해 전체 매출 성장을 도모해야 합니다.
         """)
 
     # --- 2. 상위 카테고리 성과 ---
-    elif sub_menu == "💎 경험의 가치: 카테고리별 핵심 가치":
-        st.header("💎 경험의 가치: 카테고리별 수익 기여도 분석")
+    elif sub_menu == "💎 카테고리별 수익 기여도":
+        st.header("💎 카테고리별 수익 기여도")
         st.subheader("2-1. 상위 10개 카테고리 성과 (매출, 수량, 효율성)")
 
         img_path_v3 = os.path.join(IMAGE_DIR, "top_products", "top10_revenue_quantity_v3.png")
@@ -200,8 +200,8 @@ def render(base_dir, data_dir):
         """)
 
     # --- 3. 가격대별 분포 분석 ---
-    elif sub_menu == "💳 구매 전환: 최적 가격대 식별":
-        st.header("💳 구매 전환: 최적 가격대 식별")
+    elif sub_menu == "💳 가격대별 분포":
+        st.header("💳 가격대별 분포")
         st.markdown("**가설:** 어떤 가격대의 제품이 비즈니스에 핵심적인 기여를 하고 있는가?")
 
         img_dist = os.path.join(IMAGE_DIR, "price_distribution_v2.png")
@@ -228,8 +228,8 @@ def render(base_dir, data_dir):
         """)
 
     # --- 4. 제품 특성 및 인사이트 ---
-    elif sub_menu == "🚀 성장의 개선: 전환 최적화 가이드":
-        st.header("🚀 성장의 개선: 전환 최적화 가이드")
+    elif sub_menu == "🚀 전환 최적화 가이드":
+        st.header("🚀 전환 최적화 가이드")
 
         img_attr = os.path.join(IMAGE_DIR, "h345_product_attributes.png")
         if os.path.exists(img_attr):
