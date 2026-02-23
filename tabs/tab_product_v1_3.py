@@ -83,8 +83,26 @@ def render(base_dir, data_dir):
     sub_menu = st.session_state["product_sub_menu"]
     st.markdown("---")
 
-    # 이미지 경로 설정
-    IMAGE_DIR = os.path.join(base_dir, "draft", "product", "images")
+    # 이미지 경로 설정 (더 강력한 자동 감지 로직)
+    # 1. 전달받은 base_dir 기준
+    # 2. 현재 파일(tabs/...) 기준 상위 폴더
+    # 3. 절대 경로 직접 지정 시도
+    
+    current_file_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(current_file_dir) # /Users/dayoungoh/icd6/project1_1
+    
+    # 후보 경로들
+    candidates = [
+        os.path.join(project_root, "draft", "product", "images"),
+        os.path.join(base_dir, "draft", "product", "images"),
+        "/Users/dayoungoh/icd6/project1_1/draft/product/images"
+    ]
+    
+    IMAGE_DIR = candidates[0]
+    for cand in candidates:
+        if os.path.exists(cand):
+            IMAGE_DIR = cand
+            break
 
 
 
@@ -156,7 +174,7 @@ def render(base_dir, data_dir):
         if os.path.exists(img_path_v3):
             st.image(img_path_v3, caption="Top 10 Category Performance", use_container_width=True)
         else:
-            st.warning("📷 이미지 파일이 없습니다: `images/top_products/top10_revenue_quantity_v3.png`")
+            st.warning(f"📷 이미지 파일이 없습니다. (경로 확인: {img_path_v3})")
 
         st.markdown("#### 상위 10개 카테고리 상세 데이터")
         data_top10 = {
@@ -183,19 +201,19 @@ def render(base_dir, data_dir):
             if os.path.exists(img_q):
                 st.image(img_q, caption="수량 추이")
             else:
-                st.warning("📷 이미지 파일 없음: `top5_quantity_trend.png`")
+                st.warning(f"📷 이미지 파일 없음 (경로 확인: {img_q})")
         with col2:
             img_a = os.path.join(IMAGE_DIR, "top5_deepdive", "top5_amount_trend.png")
             if os.path.exists(img_a):
                 st.image(img_a, caption="금액 추이")
             else:
-                st.warning("📷 이미지 파일 없음: `top5_amount_trend.png`")
+                st.warning(f"📷 이미지 파일 없음 (경로 확인: {img_a})")
 
         img_e = os.path.join(IMAGE_DIR, "top5_deepdive", "top5_efficiency_comparison.png")
         if os.path.exists(img_e):
             st.image(img_e, caption="효율성 비교", use_container_width=True)
         else:
-            st.warning("📷 이미지 파일 없음: `top5_efficiency_comparison.png`")
+            st.warning(f"📷 이미지 파일 없음 (경로 확인: {img_e})")
 
         st.markdown("""
         #### 💡 상위 5개 카테고리 심층 인사이트
@@ -213,7 +231,7 @@ def render(base_dir, data_dir):
         if os.path.exists(img_dist):
             st.image(img_dist, caption="Price Range Distribution", use_container_width=True)
         else:
-            st.warning("📷 이미지 파일 없음: `price_distribution_v2.png`")
+            st.warning(f"📷 이미지 파일 없음 (경로 확인: {img_dist})")
 
         st.markdown("#### 가격 구간별 기여도")
         data_price = {
@@ -240,7 +258,7 @@ def render(base_dir, data_dir):
         if os.path.exists(img_attr):
             st.image(img_attr, caption="Product Attributes Analysis", use_container_width=True)
         else:
-            st.warning("📷 이미지 파일 없음: `h345_product_attributes.png`")
+            st.warning(f"📷 이미지 파일 없음 (경로 확인: {img_attr})")
 
         st.info("""
         - **이름 길이:** 40~60자 사이의 제품이 가장 많이 판매됨.
