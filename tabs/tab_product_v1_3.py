@@ -81,17 +81,29 @@ def render(base_dir, data_dir):
             st.rerun()
 
     sub_menu = st.session_state["product_sub_menu"]
-    st.markdown("---")
-
-    # 이미지 경로 설정 (클라우드 배포 호환성을 위한 상대 경로 방식)
-    IMG_BASE = "draft/product/images"
+    # 이미지 경로 설정 (절대 경로 방식 + 안전성 체크)
+    # base_dir: 메인 실행 파일(예: admin_dashboard_v1.3.py)의 위치
+    
+    def st_image_safe(rel_path, caption="", use_container_width=True):
+        """이미지 존재 여부 확인 후 안전하게 렌더링"""
+        abs_path = os.path.join(base_dir, "draft", "product", "images", rel_path)
+        
+        if os.path.exists(abs_path):
+            st.image(abs_path, caption=caption, use_container_width=use_container_width)
+            return True
+        else:
+            # 파일이 없을 경우 에러 대신 안내 문구 표시 (클라우드 크래시 방지)
+            st.warning(f"⚠️ 이미지를 찾을 수 없습니다: {rel_path}")
+            st.caption(f"확인 경로: {abs_path}")
+            st.info("💡 **조치 방법**: 깃허브(GitHub)에 `draft` 폴더와 이미지 파일들이 모두 업로드되어 있는지 확인해 주세요.")
+            return False
 
     # --- 1. 홈 / 분석 개요 ---
     if sub_menu == "📉 핵심요약":
         st.header("📝 핵심요약 (Summary)")
         
         # 요약 섹션 이미지
-        st.image(f"{IMG_BASE}/top_products/top10_revenue_quantity_v3.png", caption="Olist 주요 카테고리 성과 요약", use_container_width=True)
+        st_image_safe("top_products/top10_revenue_quantity_v3.png", caption="Olist 주요 카테고리 성과 요약")
         st.success("""
         본 분석은 브라질 최대 이커머스 Olist의 데이터를 바탕으로 **카테고리별 성과, 가격 전략, 제품 정보 품질**의 상관관계를 심층 분석했습니다.
         특히 매출을 견인하는 핵심 가격대(200-500 BRL)와 물량을 확보하는 주력 카테고리를 식별하여 향후 비즈니스 성장을 위한 구체적인 전략 방향을 제시합니다.
@@ -148,7 +160,7 @@ def render(base_dir, data_dir):
         st.header("💎 카테고리별 수익 기여도")
         st.subheader("2-1. 상위 10개 카테고리 성과 (매출, 수량, 효율성)")
 
-        st.image(f"{IMG_BASE}/top_products/top10_revenue_quantity_v3.png", caption="Top 10 Category Performance", use_container_width=True)
+        st_image_safe("top_products/top10_revenue_quantity_v3.png", caption="Top 10 Category Performance")
 
         st.markdown("#### 상위 10개 카테고리 상세 데이터")
         data_top10 = {
@@ -171,11 +183,11 @@ def render(base_dir, data_dir):
         st.subheader("2-2. 상위 5개 카테고리 심층 분석 (Deep Dive)")
         col1, col2 = st.columns(2)
         with col1:
-            st.image(f"{IMG_BASE}/top5_deepdive/top5_quantity_trend.png", caption="수량 추이")
+            st_image_safe("top5_deepdive/top5_quantity_trend.png", caption="수량 추이")
         with col2:
-            st.image(f"{IMG_BASE}/top5_deepdive/top5_amount_trend.png", caption="금액 추이")
+            st_image_safe("top5_deepdive/top5_amount_trend.png", caption="금액 추이")
 
-        st.image(f"{IMG_BASE}/top5_deepdive/top5_efficiency_comparison.png", caption="효율성 비교", use_container_width=True)
+        st_image_safe("top5_deepdive/top5_efficiency_comparison.png", caption="효율성 비교")
 
         st.markdown("""
         #### 💡 상위 5개 카테고리 심층 인사이트
@@ -189,7 +201,7 @@ def render(base_dir, data_dir):
         st.header("💳 가격대별 분포")
         st.markdown("**가설:** 어떤 가격대의 제품이 비즈니스에 핵심적인 기여를 하고 있는가?")
 
-        st.image(f"{IMG_BASE}/price_distribution_v2.png", caption="Price Range Distribution", use_container_width=True)
+        st_image_safe("price_distribution_v2.png", caption="Price Range Distribution")
 
         st.markdown("#### 가격 구간별 기여도")
         data_price = {
@@ -212,7 +224,7 @@ def render(base_dir, data_dir):
     elif sub_menu == "🚀 전환 최적화 가이드":
         st.header("🚀 전환 최적화 가이드")
 
-        st.image(f"{IMG_BASE}/h345_product_attributes.png", caption="Product Attributes Analysis", use_container_width=True)
+        st_image_safe("h345_product_attributes.png", caption="Product Attributes Analysis")
 
         st.info("""
         - **이름 길이:** 40~60자 사이의 제품이 가장 많이 판매됨.
