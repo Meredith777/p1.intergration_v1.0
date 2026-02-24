@@ -83,68 +83,15 @@ def render(base_dir, data_dir):
     sub_menu = st.session_state["product_sub_menu"]
     st.markdown("---")
 
-    # 이미지 경로 설정 (더 강력한 자동 감지 로직)
-    # 1. 전달받은 base_dir 기준
-    # 2. 현재 파일(tabs/...) 기준 상위 폴더
-    # 3. 절대 경로 직접 지정 시도
-    
-    current_file_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(current_file_dir) # /Users/dayoungoh/icd6/project1_1
-    
-    # 후보 경로들
-    candidates = [
-        os.path.join(project_root, "draft", "product", "images"),
-        os.path.join(base_dir, "draft", "product", "images"),
-        "/Users/dayoungoh/icd6/project1_1/draft/product/images"
-    ]
-    
-    IMAGE_DIR = candidates[0]
-    for cand in candidates:
-        if os.path.exists(cand):
-            IMAGE_DIR = cand
-            break
-
-
-
-    # --- 이미지 로딩 헬퍼 함수 ---
-    def st_image_robust(rel_path, caption="", use_container_width=True):
-        """절대 경로와 관계없이 이미지를 찾아 렌더링"""
-        # 여러 후보 경로 확인
-        search_paths = [
-            os.path.join(IMAGE_DIR, rel_path),
-            os.path.join(base_dir, "draft", "product", "images", rel_path),
-            os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "draft", "product", "images", rel_path),
-            os.path.join(os.getcwd(), "draft", "product", "images", rel_path)
-        ]
-        
-        for path in search_paths:
-            if os.path.exists(path):
-                st.image(path, caption=caption, use_container_width=use_container_width)
-                return True
-        
-        # 모든 경로에서 실패 시 디버깅 정보 출력
-        st.error(f"❌ 이미지를 찾을 수 없습니다: {rel_path}")
-        with st.expander("디버깅 정보 (Path Debug)"):
-            st.write("확인한 경로 목록:")
-            for p in search_paths:
-                st.code(p)
-            st.write("현재 작업 디렉토리:", os.getcwd())
-            st.write("파일 위치:", __file__)
-            try:
-                # 상위 폴더 구조 출력 시도
-                parent = os.path.dirname(IMAGE_DIR)
-                if os.path.exists(parent):
-                    st.write(f"폴더 내용 ({parent}):", os.listdir(parent))
-            except:
-                pass
-        return False
+    # 이미지 경로 설정 (클라우드 배포 호환성을 위한 상대 경로 방식)
+    IMG_BASE = "draft/product/images"
 
     # --- 1. 홈 / 분석 개요 ---
     if sub_menu == "📉 핵심요약":
         st.header("📝 핵심요약 (Summary)")
-
-        # 요약 섹션 이미지 추가
-        st_image_robust("top_products/top10_revenue_quantity_v3.png", caption="Olist 주요 카테고리 성과 요약")
+        
+        # 요약 섹션 이미지
+        st.image(f"{IMG_BASE}/top_products/top10_revenue_quantity_v3.png", caption="Olist 주요 카테고리 성과 요약", use_container_width=True)
         st.success("""
         본 분석은 브라질 최대 이커머스 Olist의 데이터를 바탕으로 **카테고리별 성과, 가격 전략, 제품 정보 품질**의 상관관계를 심층 분석했습니다.
         특히 매출을 견인하는 핵심 가격대(200-500 BRL)와 물량을 확보하는 주력 카테고리를 식별하여 향후 비즈니스 성장을 위한 구체적인 전략 방향을 제시합니다.
@@ -201,7 +148,7 @@ def render(base_dir, data_dir):
         st.header("💎 카테고리별 수익 기여도")
         st.subheader("2-1. 상위 10개 카테고리 성과 (매출, 수량, 효율성)")
 
-        st_image_robust("top_products/top10_revenue_quantity_v3.png", caption="Top 10 Category Performance")
+        st.image(f"{IMG_BASE}/top_products/top10_revenue_quantity_v3.png", caption="Top 10 Category Performance", use_container_width=True)
 
         st.markdown("#### 상위 10개 카테고리 상세 데이터")
         data_top10 = {
@@ -224,11 +171,11 @@ def render(base_dir, data_dir):
         st.subheader("2-2. 상위 5개 카테고리 심층 분석 (Deep Dive)")
         col1, col2 = st.columns(2)
         with col1:
-            st_image_robust("top5_deepdive/top5_quantity_trend.png", caption="수량 추이")
+            st.image(f"{IMG_BASE}/top5_deepdive/top5_quantity_trend.png", caption="수량 추이")
         with col2:
-            st_image_robust("top5_deepdive/top5_amount_trend.png", caption="금액 추이")
+            st.image(f"{IMG_BASE}/top5_deepdive/top5_amount_trend.png", caption="금액 추이")
 
-        st_image_robust("top5_deepdive/top5_efficiency_comparison.png", caption="효율성 비교")
+        st.image(f"{IMG_BASE}/top5_deepdive/top5_efficiency_comparison.png", caption="효율성 비교", use_container_width=True)
 
         st.markdown("""
         #### 💡 상위 5개 카테고리 심층 인사이트
@@ -242,7 +189,7 @@ def render(base_dir, data_dir):
         st.header("💳 가격대별 분포")
         st.markdown("**가설:** 어떤 가격대의 제품이 비즈니스에 핵심적인 기여를 하고 있는가?")
 
-        st_image_robust("price_distribution_v2.png", caption="Price Range Distribution")
+        st.image(f"{IMG_BASE}/price_distribution_v2.png", caption="Price Range Distribution", use_container_width=True)
 
         st.markdown("#### 가격 구간별 기여도")
         data_price = {
@@ -265,7 +212,7 @@ def render(base_dir, data_dir):
     elif sub_menu == "🚀 전환 최적화 가이드":
         st.header("🚀 전환 최적화 가이드")
 
-        st_image_robust("h345_product_attributes.png", caption="Product Attributes Analysis")
+        st.image(f"{IMG_BASE}/h345_product_attributes.png", caption="Product Attributes Analysis", use_container_width=True)
 
         st.info("""
         - **이름 길이:** 40~60자 사이의 제품이 가장 많이 판매됨.
